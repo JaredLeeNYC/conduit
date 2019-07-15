@@ -32,6 +32,14 @@
           </li>
           <li class="nav-item">
             <router-link
+              to="/login"
+              class="nav-link"
+              exact-active-class="nav-link active"
+              ><i class="ion-compose"></i>&nbsp;Sign in</router-link
+            >
+          </li>
+          <li class="nav-item">
+            <router-link
               to="/register"
               class="nav-link"
               exact-active-class="nav-link active"
