@@ -3,7 +3,7 @@
     <div class="banner">
       <div class="container">
         <h1 class="logo-font">conduit</h1>
-        <p>A place to share your amazing knowledge.</p>
+        <p>A place to share your knowledge.</p>
       </div>
     </div>
 
@@ -13,7 +13,7 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link disabled" href>Your Feed</a>
+                 <a class="nav-link disabled" href>Your Feed</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href>Global Feed</a>
