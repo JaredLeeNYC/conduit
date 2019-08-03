@@ -5,11 +5,14 @@
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign in</h1>
           <p class="text-xs-center">
-            <a href="">Need an account?</a>
+            <a href>Need an account?</a>
           </p>
-
+          <ul class="error-messages">
+            <li v-for="(error, index) in errors" :key="index">
+              {{ error.message }}
+            </li>
+          </ul>
           <form>
-            
             <fieldset class="form-group">
               <input
                 v-model="email"
@@ -37,20 +40,31 @@
 </template>
 <script>
 export default {
-    data: function() {
-        return {
-            password: "",
-            email: ""
-        };
-    },
-    methods: {
-        login() {
-            this.$store.dispatch("users/loginUser", {
-                email: this.email,
-                password: this.password
-            });
-        
-        }
+  data: function() {
+    return {
+      password: "",
+      email: "",
+      errors: []
+    };
+  },
+  methods: {
+    login() {
+      this.$store
+        .dispatch("users/loginUser", {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          this.errors = [];
+        })
+        .then(() => {
+          // #todo, nice toast and no redirect
+          this.$router.push({ name: "home" });
+        })
+        .catch(err => {
+          this.errors.push(err);
+        });
     }
-}
+  }
+};
 </script>
