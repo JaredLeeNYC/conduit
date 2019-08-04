@@ -43,6 +43,21 @@ export default {
         console.error(e);
         throw e;
       }
+    },
+    updateUser: async function({commit}, currentUser){
+      const response = await api.put("/user", {
+        user: {
+          "email": currentUser.email,
+          "username": currentUser.username,
+          "password": currentUser.password,
+          "image": currentUser.image,
+          "bio": currentUser.bio
+        }
+      });
+      if(response.data.user){
+        commit("setUser", response.data.user);
+      }
+
     }
   }
 };

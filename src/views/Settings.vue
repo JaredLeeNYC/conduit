@@ -20,7 +20,7 @@
                   class="form-control form-control-lg"
                   type="text"
                   placeholder="Your Name"
-                  :value="user.username"
+                  v-model="user.username"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -28,7 +28,7 @@
                   class="form-control form-control-lg"
                   rows="8"
                   placeholder="Short bio about you"
-                  :value="user.bio"
+                  v-model="user.bio"
                 ></textarea>
               </fieldset>
               <fieldset class="form-group">
@@ -36,7 +36,7 @@
                   class="form-control form-control-lg"
                   type="text"
                   placeholder="Email"
-                  :value="user.email"
+                  v-model="user.email"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -44,9 +44,10 @@
                   class="form-control form-control-lg"
                   type="password"
                   placeholder="Password"
+                  v-model="user.password"
                 />
               </fieldset>
-              <button class="btn btn-lg btn-primary pull-xs-right">
+              <button class="btn btn-lg btn-primary pull-xs-right" @click="updateUser()">
                 Update Settings
               </button>
             </fieldset>
@@ -71,6 +72,10 @@ export default {
   methods: {
     logoutUser() {
       this.$store.commit("users/logoutUser");
+      this.$router.push({ name: "home" });
+    },
+    updateUser() {
+      this.$store.dispatch("users/updateUser", this.user);
       this.$router.push({ name: "home" });
     }
   }
