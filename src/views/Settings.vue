@@ -77,7 +77,13 @@ export default {
     updateUser() {
       this.$store.dispatch("users/updateUser", this.user);
       this.$router.push({ name: "home" });
+    },
+    getCurrentuser() {
+      this.$store.dispatch("users/getUser");
     }
+  },
+  async mounted(){
+    this.getCurrentuser();
   }
 };
 </script>

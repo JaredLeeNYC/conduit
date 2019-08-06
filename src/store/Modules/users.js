@@ -23,8 +23,10 @@ export default {
   },
   actions: {
     getUser: async function({ commit }) {
-      const user = await api.get("user");
-      commit("setUser", user);
+      const response = await api.get("user");
+      if(response.data.user){
+        commit("setUser", response.data.user);
+      }
     },
     loginUser: async function({ commit }, { email, password }) {
       clearToken();
