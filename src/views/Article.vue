@@ -2,22 +2,26 @@
   <div class="article-page">
     <div class="banner">
       <div class="container">
-        <h1>How to build webapps that scale</h1>
+        <h1>{{ article.title }}</h1>
 
         <div class="article-meta">
-          <a href=""><img src="http://i.imgur.com/Qr71crq.jpg"/></a>
+          <a href>
+            <img :src="article.author.image" />
+          </a>
           <div class="info">
-            <a href="" class="author">Eric Simons</a>
-            <span class="date">January 20th</span>
+            <a href class="author">{{ article.author.username }}</a>
+            <span class="date">{{ article.createdAt }}</span>
           </div>
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
-            &nbsp; Follow Eric Simons <span class="counter">(10)</span>
+            &nbsp; Follow {{ article.author.username }}
+            <span class="counter">(10)</span>
           </button>
           &nbsp;&nbsp;
           <button class="btn btn-sm btn-outline-primary">
             <i class="ion-heart"></i>
-            &nbsp; Favorite Post <span class="counter">(29)</span>
+            &nbsp; Favorite Post
+            <span class="counter">(29)</span>
           </button>
         </div>
       </div>
@@ -26,12 +30,8 @@
     <div class="container page">
       <div class="row article-content">
         <div class="col-md-12">
-          <p>
-            Web development technologies have evolved at an incredible clip over
-            the past few years.
-          </p>
-          <h2 id="introducing-ionic">Introducing RealWorld.</h2>
-          <p>It's a great solution for learning how other frameworks work.</p>
+          <p>{{ article.description }}</p>
+          <p>{{ article.body }}</p>
         </div>
       </div>
 
@@ -39,20 +39,24 @@
 
       <div class="article-actions">
         <div class="article-meta">
-          <a href="profile.html"><img src="http://i.imgur.com/Qr71crq.jpg"/></a>
+          <a href="profile.html">
+            <img src="http://i.imgur.com/Qr71crq.jpg" />
+          </a>
           <div class="info">
-            <a href="" class="author">Eric Simons</a>
+            <a href class="author">Eric Simons</a>
             <span class="date">January 20th</span>
           </div>
 
           <button class="btn btn-sm btn-outline-secondary">
             <i class="ion-plus-round"></i>
-            &nbsp; Follow Eric Simons <span class="counter">(10)</span>
+            &nbsp; Follow Eric Simons
+            <span class="counter">(10)</span>
           </button>
           &nbsp;
           <button class="btn btn-sm btn-outline-primary">
             <i class="ion-heart"></i>
-            &nbsp; Favorite Post <span class="counter">(29)</span>
+            &nbsp; Favorite Post
+            <span class="counter">(29)</span>
           </button>
         </div>
       </div>
@@ -72,9 +76,7 @@
                 src="http://i.imgur.com/Qr71crq.jpg"
                 class="comment-author-img"
               />
-              <button class="btn btn-sm btn-primary">
-                Post Comment
-              </button>
+              <button class="btn btn-sm btn-primary">Post Comment</button>
             </div>
           </form>
 
@@ -86,14 +88,14 @@
               </p>
             </div>
             <div class="card-footer">
-              <a href="" class="comment-author">
+              <a href class="comment-author">
                 <img
                   src="http://i.imgur.com/Qr71crq.jpg"
                   class="comment-author-img"
                 />
               </a>
               &nbsp;
-              <a href="" class="comment-author">Jacob Schmidt</a>
+              <a href class="comment-author">Jacob Schmidt</a>
               <span class="date-posted">Dec 29th</span>
             </div>
           </div>
@@ -106,14 +108,14 @@
               </p>
             </div>
             <div class="card-footer">
-              <a href="" class="comment-author">
+              <a href class="comment-author">
                 <img
                   src="http://i.imgur.com/Qr71crq.jpg"
                   class="comment-author-img"
                 />
               </a>
               &nbsp;
-              <a href="" class="comment-author">Jacob Schmidt</a>
+              <a href class="comment-author">Jacob Schmidt</a>
               <span class="date-posted">Dec 29th</span>
               <span class="mod-options">
                 <i class="ion-edit"></i>
@@ -126,3 +128,25 @@
     </div>
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  methods: {
+    getCurrentArticle(articleSlug) {
+      this.$store.dispatch("article/getCurrentArticle", articleSlug);
+    }
+  },
+  computed: {
+    ...mapState({
+      article: state => state.article.article
+    })
+  },
+  mounted() {
+    this.getCurrentArticle(this.$route.params.articleSlug);
+  }
+};
+</script>
+
+<style lang="scss" scoped></style>
