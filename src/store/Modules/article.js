@@ -6,8 +6,8 @@ export default {
     article: {}
   },
   getters: {
-    value: state => {
-      return state.value;
+    currentArticle: state => {
+      return state.article;
     }
   },
   mutations: {
@@ -26,6 +26,12 @@ export default {
         }
       } catch (e) {
         console.log(e.message);
+      }
+    },
+    async getCurrentArticle({ commit }, articleSlug) {
+      const response = await api.get("articles/" + articleSlug);
+      if (response.data.article) {
+        commit("setArticle", response.data.article);
       }
     }
   }
