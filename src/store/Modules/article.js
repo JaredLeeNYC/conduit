@@ -3,7 +3,9 @@ import { api } from "../api";
 export default {
   namespaced: true,
   state: {
-    article: {}
+    article: {
+      author: {}
+    }
   },
   getters: {
     currentArticle: state => {

@@ -109,10 +109,7 @@
             </div>
             <div class="card-footer">
               <a href class="comment-author">
-                <img
-                  src="http://i.imgur.com/Qr71crq.jpg"
-                  class="comment-author-img"
-                />
+                <img src class="comment-author-img" />
               </a>
               &nbsp;
               <a href class="comment-author">Jacob Schmidt</a>
@@ -148,5 +145,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
