@@ -48,6 +48,19 @@
               <span>Read more...</span>
             </router-link>
           </div>
+          <nav>
+            <ul class="pagination">
+              <li
+                v-for="n in 50"
+                data-test="page-link-1"
+                :class="isActivePage(n)"
+                :key="n"
+                @click="changePage(n)"
+              >
+                <a class="page-link">{{ n }}</a>
+              </li>
+            </ul>
+          </nav>
         </div>
 
         <div class="col-md-3">
@@ -81,7 +94,9 @@ export default {
   data() {
     return {
       tags: [],
-      articles: []
+      articles: [],
+      selectedPage: 1,
+      isActive: "page-item"
     };
   },
   methods: {
@@ -90,10 +105,23 @@ export default {
         return response.data.tags;
       });
     },
-    getArticles: async function() {
-      this.articles = await api.get("/articles").then(function(response) {
-        return response.data.articles;
-      });
+    getArticles: async function(n) {
+      this.articles = await api
+        .get("/articles?limit=10&&offset=" + (n - 1) * 10)
+        .then(function(response) {
+          return response.data.articles;
+        });
+    },
+    changePage: function(n) {
+      this.selectedPage = n;
+      this.getArticles(n);
+    },
+    isActivePage: function(n) {
+      this.isActive = "page-item";
+      if (this.selectedPage === n) {
+        this.isActive = "page-item active";
+      }
+      return this.isActive;
     }
   },
   mounted() {
