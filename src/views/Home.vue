@@ -95,8 +95,7 @@ export default {
     return {
       tags: [],
       articles: [],
-      selectedPage: 1,
-      isActive: "page-item"
+      selectedPage: 1
     };
   },
   methods: {
@@ -117,16 +116,16 @@ export default {
       this.getArticles(n);
     },
     isActivePage: function(n) {
-      this.isActive = "page-item";
+      let isActive = "page-item";
       if (this.selectedPage === n) {
-        this.isActive = "page-item active";
+        isActive = "page-item active";
       }
-      return this.isActive;
+      return isActive;
     }
   },
   mounted() {
     this.getTags();
-    this.getArticles();
+    this.getArticles(1);
   }
 };
 </script>
