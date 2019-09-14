@@ -13,10 +13,10 @@
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
               <li class="nav-item">
-                <a class="nav-link disabled" href>Your Feed</a>
+                <a :class="tabY" @click="selectTabY()">Your Feed</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href>Global Feed</a>
+                <a :class="tabG" @click="selectTabG()">Global Feed</a>
               </li>
             </ul>
           </div>
@@ -95,7 +95,9 @@ export default {
     return {
       tags: [],
       articles: [],
-      selectedPage: 1
+      selectedPage: 1,
+      tabG: "nav-link active",
+      tabY: "nav-link"
     };
   },
   methods: {
@@ -104,16 +106,18 @@ export default {
         return response.data.tags;
       });
     },
-    getArticles: async function(n) {
+    getArticles: async function(n, author) {
       this.articles = await api
-        .get("/articles?limit=10&&offset=" + (n - 1) * 10)
+        .get(
+          "/articles?limit=10&&offset=" + (n - 1) * 10 + "&&author=" + author
+        )
         .then(function(response) {
           return response.data.articles;
         });
     },
     changePage: function(n) {
       this.selectedPage = n;
-      this.getArticles(n);
+      this.getArticles(n, "");
     },
     isActivePage: function(n) {
       let isActive = "page-item";
@@ -121,11 +125,19 @@ export default {
         isActive = "page-item active";
       }
       return isActive;
+    },
+    selectTabG: function() {
+      (this.tabG = "nav-link active"), (this.tabY = "nav-link");
+      this.getArticles(1, "");
+    },
+    selectTabY: function() {
+      (this.tabY = "nav-link active"), (this.tabG = "nav-link");
+      this.getArticles(1, this.$store.state.users.user.username);
     }
   },
   mounted() {
     this.getTags();
-    this.getArticles(1);
+    this.getArticles(1, "");
   }
 };
 </script>
