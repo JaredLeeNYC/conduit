@@ -12,11 +12,19 @@
         <div class="col-md-9">
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a :class="tabY" @click="selectTabY()">Your Feed</a>
               </li>
               <li class="nav-item">
                 <a :class="tabG" @click="selectTabG()">Global Feed</a>
+              </li>-->
+              <li v-for="(tab, index) in tabs" :key="index" class="nav-item">
+                <a
+                  class="nav-link"
+                  :class="{ active: selectedTab === tab }"
+                  @click="selectTab(tab)"
+                  >{{ tab }}</a
+                >
               </li>
             </ul>
           </div>
@@ -53,7 +61,8 @@
               <li
                 v-for="n in 50"
                 data-test="page-link-1"
-                :class="isActivePage(n)"
+                class="page-item"
+                :class="{ active: selectedPage === n }"
                 :key="n"
                 @click="changePage(n)"
               >
@@ -69,10 +78,10 @@
 
             <div class="tag-list">
               <a
-                href
                 class="tag-pill tag-default"
                 v-for="tag in tags"
                 :key="tag"
+                @click="displayTag(tag)"
                 >{{ tag }}</a
               >
             </div>
@@ -96,8 +105,10 @@ export default {
       tags: [],
       articles: [],
       selectedPage: 1,
-      tabG: "nav-link active",
-      tabY: "nav-link"
+      // tabG: "nav-link active",
+      // tabY: "nav-link",
+      tabs: ["Your Feed", "Global Feed"],
+      selectedTab: "Global Feed"
     };
   },
   methods: {
@@ -106,10 +117,15 @@ export default {
         return response.data.tags;
       });
     },
-    getArticles: async function(n, author) {
+    getArticles: async function(n, author, tag) {
       this.articles = await api
         .get(
-          "/articles?limit=10&&offset=" + (n - 1) * 10 + "&&author=" + author
+          "/articles?limit=10&&offset=" +
+            (n - 1) * 10 +
+            "&&author=" +
+            author +
+            "&&tag=" +
+            tag
         )
         .then(function(response) {
           return response.data.articles;
@@ -119,25 +135,36 @@ export default {
       this.selectedPage = n;
       this.getArticles(n, "");
     },
-    isActivePage: function(n) {
-      let isActive = "page-item";
-      if (this.selectedPage === n) {
-        isActive = "page-item active";
+    selectTab: function(tab) {
+      this.tabs = ["Your Feed", "Global Feed"];
+      this.selectedTab = tab;
+      switch (tab) {
+        case "Your Feed":
+          this.getArticles(1, this.$store.state.users.user.username, "");
+          break;
+        case "Global Feed":
+          this.getArticles(1, "", "");
+          break;
       }
-      return isActive;
     },
-    selectTabG: function() {
-      (this.tabG = "nav-link active"), (this.tabY = "nav-link");
-      this.getArticles(1, "");
-    },
-    selectTabY: function() {
-      (this.tabY = "nav-link active"), (this.tabG = "nav-link");
-      this.getArticles(1, this.$store.state.users.user.username);
+    displayTag: function(tag) {
+      this.tabs = ["Your Feed", "Global Feed"];
+      this.tabs.push("#" + tag);
+      this.selectedTab = "#" + tag;
+      this.getArticles(1, "", tag);
     }
+    // selectTabG: function() {
+    //   (this.tabG = "nav-link active"), (this.tabY = "nav-link");
+    //   this.getArticles(1, "");
+    // },
+    // selectTabY: function() {
+    //   (this.tabY = "nav-link active"), (this.tabG = "nav-link");
+    //   this.getArticles(1, this.$store.state.users.user.username);
+    // }
   },
   mounted() {
     this.getTags();
-    this.getArticles(1, "");
+    this.getArticles(1, "", "");
   }
 };
 </script>
