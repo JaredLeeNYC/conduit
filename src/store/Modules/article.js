@@ -5,7 +5,8 @@ export default {
   state: {
     article: {
       author: {}
-    }
+    },
+    articles: []
   },
   getters: {
     currentArticle: state => {
@@ -15,6 +16,9 @@ export default {
   mutations: {
     setArticle(state, payload) {
       state.article = payload;
+    },
+    setArticles(state, payload) {
+      state.articles = payload;
     }
   },
   actions: {
@@ -34,6 +38,14 @@ export default {
       const response = await api.get("articles/" + articleSlug);
       if (response.data.article) {
         commit("setArticle", response.data.article);
+      }
+    },
+    async feedArticles({ commit }) {
+      console.log("here");
+      const response = await api.get("articles/feed");
+      console.log("www");
+      if (response.data.articles) {
+        commit("setArticles", response.data.articles);
       }
     }
   }
