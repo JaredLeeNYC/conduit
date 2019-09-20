@@ -131,16 +131,22 @@ export default {
           return response.data.articles;
         });
     },
+    getFeedArticles: async function() {
+      this.articles = await api.get("/articles/feed").then(function(response) {
+        return response.data.articles;
+      });
+    },
     changePage: function(n) {
       this.selectedPage = n;
-      this.getArticles(n, "");
+      this.getArticles(n, "", "");
     },
     selectTab: function(tab) {
       this.tabs = ["Your Feed", "Global Feed"];
       this.selectedTab = tab;
       switch (tab) {
         case "Your Feed":
-          this.getArticles(1, this.$store.state.users.user.username, "");
+          console.log("feed");
+          this.feedArticles();
           break;
         case "Global Feed":
           this.getArticles(1, "", "");
@@ -152,15 +158,12 @@ export default {
       this.tabs.push("#" + tag);
       this.selectedTab = "#" + tag;
       this.getArticles(1, "", tag);
+    },
+    feedArticles() {
+      console.log("feed2");
+      this.$store.dispatch("article/feedArticles");
+      this.articles = this.$store.state.article.articles;
     }
-    // selectTabG: function() {
-    //   (this.tabG = "nav-link active"), (this.tabY = "nav-link");
-    //   this.getArticles(1, "");
-    // },
-    // selectTabY: function() {
-    //   (this.tabY = "nav-link active"), (this.tabG = "nav-link");
-    //   this.getArticles(1, this.$store.state.users.user.username);
-    // }
   },
   mounted() {
     this.getTags();

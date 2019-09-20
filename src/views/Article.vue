@@ -12,16 +12,32 @@
             <a href class="author">{{ article.author.username }}</a>
             <span class="date">{{ article.createdAt }}</span>
           </div>
-          <button class="btn btn-sm btn-outline-secondary">
+          <button
+            v-if="article.author.following"
+            class="btn btn-sm btn-outline-secondary"
+          >
             <i class="ion-plus-round"></i>
-            &nbsp; Follow {{ article.author.username }}
-            <span class="counter">(10)</span>
+            &nbsp; unFollow {{ article.author.username }}
+            {{ article.author.following }}
+          </button>
+          <button v-else class="btn btn-sm btn-outline-secondary">
+            <i class="ion-plus-round"></i>
+            &nbsp;+ Follow {{ article.author.username }}
+            {{ article.author.following }}
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary">
+          <button
+            v-if="article.favorited"
+            class="btn btn-sm btn-outline-primary"
+          >
             <i class="ion-heart"></i>
-            &nbsp; Favorite Post
-            <span class="counter">(29)</span>
+            &nbsp; Unfavorite Article
+            <span class="counter">{{ article.favoritesCount }}</span>
+          </button>
+          <button v-else class="btn btn-sm btn-outline-primary">
+            <i class="ion-heart"></i>
+            &nbsp; Favorite Article
+            <span class="counter">{{ article.favoritesCount }}</span>
           </button>
         </div>
       </div>
@@ -40,17 +56,24 @@
       <div class="article-actions">
         <div class="article-meta">
           <a href="profile.html">
-            <img src="http://i.imgur.com/Qr71crq.jpg" />
+            <img src="article.author.image" />
           </a>
           <div class="info">
-            <a href class="author">Eric Simons</a>
-            <span class="date">January 20th</span>
+            <a href class="author">{{ article.author.username }}</a>
+            <span class="date">{{ article.createdAt }}</span>
           </div>
 
-          <button class="btn btn-sm btn-outline-secondary">
+          <button
+            v-if="article.author.following"
+            class="btn btn-sm btn-outline-secondary"
+          >
             <i class="ion-plus-round"></i>
-            &nbsp; Follow Eric Simons
-            <span class="counter">(10)</span>
+            &nbsp;+ unFollow {{ article.author.username }}
+          </button>
+
+          <button v-else class="btn btn-sm btn-outline-secondary">
+            <i class="ion-plus-round"></i>
+            &nbsp;+ Follow {{ article.author.username }}
           </button>
           &nbsp;
           <button class="btn btn-sm btn-outline-primary">
@@ -137,7 +160,8 @@ export default {
   },
   computed: {
     ...mapState({
-      article: state => state.article.article
+      article: state => state.article.article,
+      currentUser: state => state.users.user
     })
   },
   mounted() {
